@@ -1347,3 +1347,190 @@ a.hero-button {
 .mood-day small { font-size: 11px; color: var(--text-muted); }
 .mood-day.empty span { color: var(--text-muted); }
 
+
+/* ==============================
+   Responsive: tablets & phones
+   ============================== */
+
+/* Tablets */
+@media (max-width: 1024px) {
+    .main-content { padding: 32px 28px; }
+    .module-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .hero { padding: 36px; }
+}
+
+/* Phones & small tablets: sidebar becomes a sticky top bar */
+@media (max-width: 768px) {
+    .app-container { flex-direction: column; }
+
+    .sidebar {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        width: 100%;
+        height: auto;
+        min-height: 0;
+        padding: 12px 16px;
+        flex-direction: row;
+        align-items: center;
+        gap: 14px;
+        overflow: visible;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+    }
+
+    .sidebar .logo {
+        font-size: 20px;
+        margin: 0;
+        flex-shrink: 0;
+    }
+
+    .menu-heading,
+    .sidebar-bottom { display: none; }
+
+    /* Nav links scroll sideways instead of stacking */
+    .sidebar nav {
+        flex-direction: row;
+        gap: 6px;
+        overflow-x: auto;
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
+        flex: 1;
+        min-width: 0;
+    }
+
+    .sidebar nav::-webkit-scrollbar { display: none; }
+
+    .sidebar .nav-link {
+        padding: 9px 14px;
+        white-space: nowrap;
+        flex-shrink: 0;
+        font-size: 13px;
+    }
+
+    .main-content { padding: 24px 16px; }
+
+    /* Welcome + hero */
+    .welcome-section {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+        margin-bottom: 28px;
+    }
+
+    .welcome-section h1 { font-size: 26px; }
+
+    .hero {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 28px 22px;
+        min-height: 0;
+        gap: 24px;
+        margin-bottom: 32px;
+    }
+
+    .hero-content { max-width: none; }
+    .hero-content h2 { font-size: 24px; }
+    .progress-card { width: 100%; }
+
+    /* Cards & grids */
+    .module-grid { grid-template-columns: 1fr; gap: 16px; }
+    .module-card { padding: 22px; }
+    .module-card p { min-height: 0; }
+    .ov-dashboard { grid-template-columns: 1fr; gap: 16px; margin-bottom: 36px; }
+    .wellness-grid { grid-template-columns: 1fr; }
+
+    .api-section h2,
+    .schedule-section h2 { font-size: 22px; }
+
+    /* Forms: full-width inputs, 16px text so iPhones don't zoom in */
+    .toolbar input,
+    .toolbar select,
+    .api-section .toolbar input,
+    .task-form input,
+    .ov-quick-add input,
+    .ov-card select,
+    .wellness-input,
+    #schedule-name { font-size: 16px; min-width: 0; }
+
+    .api-section .toolbar > * { flex: 1 1 100%; }
+
+    .task-form { flex-direction: column; }
+
+    .task-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .plan-workspace { padding: 22px 18px; }
+
+    /* Calendar: scroll sideways with a slimmer grid */
+    .calendar-header,
+    .calendar-row {
+        grid-template-columns: 56px repeat(7, minmax(78px, 1fr));
+        min-width: 600px;
+    }
+
+    /* Weather */
+    .card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+
+    /* Focus */
+    .focus-layout { grid-template-columns: 1fr; gap: 18px; }
+    .focus-timer-card { padding: 24px 16px; }
+    .focus-modes { display: flex; width: 100%; }
+    .focus-mode { flex: 1; padding: 8px 6px; font-size: 13px; }
+    .focus-time { font-size: 44px; }
+
+    /* Eat */
+    .eat-layout { grid-template-columns: 1fr; }
+    .eat-layout .card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .eat-grocery { position: static; }
+
+    /* Dialogs: take most of the screen */
+    .meal-dialog,
+    .schedule-dialog {
+        width: 94vw;
+        max-height: 90vh;
+        padding: 20px;
+        border-radius: 18px;
+    }
+
+    .meal-ingredients { grid-template-columns: 1fr; }
+
+    .schedule-actions { flex-wrap: wrap; }
+
+    /* Footer */
+    .footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .closing-section { padding: 26px 18px; }
+}
+
+/* Small phones */
+@media (max-width: 420px) {
+    .sidebar .logo { display: none; }   /* give the nav the full width */
+
+    .welcome-section h1 { font-size: 23px; }
+    .hero-content h2 { font-size: 21px; }
+
+    .primary-button,
+    .hero-button { padding: 12px 16px; }
+
+    .ov-stats strong { font-size: 22px; }
+
+    .meal-card-body { padding: 10px; }
+    .meal-card-body h4 { font-size: 13px; }
+
+    .focus-time { font-size: 38px; }
+    .focus-settings { flex-direction: column; }
+
+    .mood-options button { font-size: 22px; }
+    .mood-day span { font-size: 16px; }
+
+    .water-glass { width: 26px; height: 34px; }
+
+    .schedule-categories span { padding: 7px 11px; }
+}
