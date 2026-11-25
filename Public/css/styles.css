@@ -450,29 +450,27 @@ body {
 }
 
 .task-item.completed span {
-    text-decoration span {
-        text-decoration: line-through;
-        color: var(--text-muted);
-    }
+    text-decoration: line-through;
+    color: var(--text-muted);
+}
 
-    .task-actions {
-        display: flex;
-        gap: 8px;
-    }
+.task-actions {
+    display: flex;
+    gap: 8px;
+}
 
-    .task-actions button {
-        border: none;
-        padding: 9px 12px;
-        border-radius: 9px;
-        cursor: pointer;
-        background-color: #EAF4EE;
-        color: var(--forest-green);
-    }
+.task-actions button {
+    border: none;
+    padding: 9px 12px;
+    border-radius: 9px;
+    cursor: pointer;
+    background-color: #EAF4EE;
+    color: var(--forest-green);
+}
 
-    .task-actions button:last-child {
-        background-color: #FCECEC;
-        color: #B54B4B;
-    }
+.task-actions button:last-child {
+    background-color: #FCECEC;
+    color: #B54B4B;
 }
 
 .api-section {
@@ -750,3 +748,487 @@ body {
 .weather-temp { font-size: 1.5rem; font-weight: 800; }
 .weather-temp span { font-size: 1rem; font-weight: 500; opacity: 0.6; }
 .weather-desc { text-transform: capitalize; font-size: 0.85rem; opacity: 0.7; margin-bottom: 8px; }
+.page[hidden] {
+    display: none !important;
+}
+
+/* ==============================
+   Shared buttons / links
+   ============================== */
+.primary-button,
+.ghost-button {
+    border: none;
+    border-radius: 10px;
+    padding: 12px 20px;
+    font-family: inherit;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+a.primary-button,
+a.hero-button {
+    display: inline-block;
+    text-decoration: none;
+}
+
+.ghost-button {
+    background-color: var(--white);
+    color: var(--forest-green);
+    border: 1px solid #DCE5DE;
+}
+
+.ghost-button:hover { border-color: var(--growth-green); }
+
+.link-button {
+    background: none;
+    border: none;
+    color: var(--growth-green);
+    font: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+/* ==============================
+   Overview dashboard
+   ============================== */
+.ov-dashboard {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+    margin-bottom: 50px;
+}
+
+.ov-card {
+    background-color: var(--white);
+    border: 1px solid #E6ECE7;
+    border-radius: 20px;
+    padding: 22px;
+    box-shadow: 0 3px 12px rgba(18, 61, 50, 0.03);
+}
+
+.ov-card h3 {
+    font-size: 17px;
+    color: var(--forest-green);
+    margin-bottom: 12px;
+}
+
+.ov-card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.ov-card-head h3,
+.ov-card-head h4 { margin: 0; }
+
+.ov-card-head a {
+    color: var(--growth-green);
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.ov-quick-add {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.ov-quick-add input,
+.ov-card select,
+.focus-settings input {
+    flex: 1;
+    min-width: 0;
+    padding: 10px 12px;
+    border: 1px solid #DCE5DE;
+    border-radius: 10px;
+    font: inherit;
+    background: var(--white);
+}
+
+.ov-card select { width: 100%; }
+
+.ov-quick-add button {
+    background-color: var(--growth-green);
+    color: var(--white);
+    border: none;
+    border-radius: 10px;
+    padding: 0 16px;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.ov-list { list-style: none; }
+
+.ov-list li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid #EDF1ED;
+    font-size: 14px;
+}
+
+.ov-list li:last-child { border-bottom: none; }
+.ov-list li small { color: var(--text-muted); white-space: nowrap; }
+.ov-list label { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+.ov-list li.done span { text-decoration: line-through; color: var(--text-muted); }
+
+.ov-list li button {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.ov-empty {
+    color: var(--text-muted);
+    font-size: 14px;
+}
+
+.ov-empty a { color: var(--growth-green); }
+
+.ov-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 8px;
+    background-color: var(--fresh-mint);
+}
+
+.ov-dot.study { background-color: #6C8EF5; }
+.ov-dot.work { background-color: var(--growth-green); }
+.ov-dot.meal { background-color: var(--sunshine); }
+
+.ov-weather-now {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.ov-weather-now img { width: 64px; height: 64px; }
+.ov-weather-now strong { display: block; font-size: 28px; color: var(--forest-green); }
+.ov-weather-now span { text-transform: capitalize; color: var(--text-muted); font-size: 14px; }
+.ov-weather p { font-size: 14px; margin-top: 6px; }
+.ov-tip { color: var(--growth-green); font-weight: 600; }
+
+.ov-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 12px;
+    text-align: center;
+}
+
+.ov-stats div {
+    background-color: var(--soft-cream);
+    border-radius: 14px;
+    padding: 14px 6px;
+}
+
+.ov-stats strong { display: block; font-size: 26px; color: var(--forest-green); }
+.ov-stats span { font-size: 12px; color: var(--text-muted); }
+
+/* ==============================
+   Focus
+   ============================== */
+.focus-layout {
+    display: grid;
+    grid-template-columns: minmax(280px, 1.2fr) 1fr;
+    gap: 24px;
+    margin-top: 20px;
+}
+
+.focus-side { display: flex; flex-direction: column; gap: 20px; }
+
+.focus-timer-card {
+    background-color: var(--forest-green);
+    color: var(--white);
+    border-radius: 24px;
+    padding: 30px;
+    text-align: center;
+}
+
+.focus-modes {
+    display: inline-flex;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 4px;
+    margin-bottom: 24px;
+}
+
+.focus-mode {
+    background: none;
+    border: none;
+    color: var(--fresh-mint);
+    padding: 8px 14px;
+    border-radius: 9px;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.focus-mode.active { background-color: var(--white); color: var(--forest-green); }
+
+.focus-ring {
+    position: relative;
+    width: min(260px, 100%);
+    margin: 0 auto 18px;
+    aspect-ratio: 1;
+}
+
+.focus-ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.focus-ring circle { fill: none; stroke-width: 6; }
+.focus-ring-track { stroke: rgba(255, 255, 255, 0.12); }
+.focus-ring-fill { stroke: var(--sunshine); stroke-linecap: round; transition: stroke-dashoffset 0.25s linear; }
+.focus-ring-fill.break { stroke: var(--fresh-mint); }
+
+.focus-time {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 54px;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+}
+
+.focus-current { color: var(--fresh-mint); margin-bottom: 20px; min-height: 1.4em; }
+
+.focus-controls { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+.focus-controls .primary-button { min-width: 120px; }
+
+.focus-check {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+    font-size: 14px;
+    color: var(--text-muted);
+}
+
+.focus-settings { display: flex; gap: 10px; }
+
+.focus-settings label {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+/* ==============================
+   Eat
+   ============================== */
+.eat-layout {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 24px;
+    align-items: start;
+}
+
+.eat-layout .card-grid { grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); }
+.eat-grocery { position: sticky; top: 20px; }
+
+.meal-card {
+    position: relative;
+    background-color: var(--white);
+    border-radius: 16px;
+    overflow: hidden;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.meal-card:hover { transform: translateY(-4px); box-shadow: 0 10px 25px rgba(18, 61, 50, 0.1); }
+.meal-card img { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; }
+.meal-card-body { padding: 12px 14px 16px; }
+.meal-card-body h4 { font-size: 15px; margin-bottom: 8px; color: var(--forest-green); }
+.meal-card-body .badge { margin-right: 4px; }
+
+.meal-fav {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.92);
+    font-size: 18px;
+    color: var(--forest-green);
+    cursor: pointer;
+}
+
+.meal-fav.on { color: #D93F5A; }
+
+.meal-dialog {
+    width: min(680px, 92vw);
+    max-height: 88vh;
+    margin: auto;
+    border: none;
+    border-radius: 22px;
+    padding: 28px;
+    color: var(--text-dark);
+}
+
+.meal-dialog::backdrop { background: rgba(18, 61, 50, 0.55); }
+
+.meal-dialog-close {
+    position: sticky;
+    top: 0;
+    float: right;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: var(--soft-cream);
+    font-size: 22px;
+    cursor: pointer;
+}
+
+.meal-detail-img { width: 100%; max-height: 280px; object-fit: cover; border-radius: 16px; margin-bottom: 16px; }
+.meal-dialog h3 { font-size: 24px; color: var(--forest-green); }
+.meal-dialog h4 { margin: 20px 0 10px; color: var(--forest-green); }
+
+.meal-ingredients {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: 6px 16px;
+    font-size: 14px;
+}
+
+.meal-steps { padding-left: 20px; line-height: 1.6; font-size: 14px; }
+.meal-steps li { margin-bottom: 8px; }
+.meal-dialog a { color: var(--growth-green); font-weight: 700; }
+
+@media (max-width: 900px) {
+    .focus-layout,
+    .eat-layout { grid-template-columns: 1fr; }
+    .eat-grocery { position: static; }
+}
+
+/* ==============================
+   Plan: clickable calendar + schedule modal
+   ============================== */
+.calendar-hint {
+    color: var(--text-muted);
+    font-size: 14px;
+    margin-bottom: 14px;
+}
+
+.calendar .slot {
+    cursor: pointer;
+    min-height: 56px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    transition: background-color 0.15s ease;
+}
+
+.calendar .slot:hover { background-color: #F3F8F4; }
+
+.calendar .slot:empty:hover::after {
+    content: "+";
+    margin: auto;
+    color: var(--growth-green);
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.calendar .slot .event { cursor: pointer; margin: 0; }
+.calendar .slot .event:hover { filter: brightness(0.95); }
+.calendar .personal { background-color: #EDE7FB; color: #5B3FA8; }
+
+.calendar .event.done {
+    opacity: 0.55;
+    text-decoration: line-through;
+}
+
+.task-when {
+    display: inline-block;
+    margin-left: 10px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background-color: #EAF4EE;
+    color: var(--growth-green);
+    font-size: 11px;
+    font-weight: 700;
+    text-decoration: none;
+    vertical-align: middle;
+}
+
+.schedule-dialog {
+    width: min(440px, 92vw);
+    margin: auto;
+    border: none;
+    border-radius: 22px;
+    padding: 28px;
+    color: var(--text-dark);
+}
+
+.schedule-dialog::backdrop { background: rgba(18, 61, 50, 0.55); }
+
+.schedule-dialog h3 {
+    font-size: 21px;
+    color: var(--forest-green);
+    margin: 4px 0 18px;
+}
+
+#schedule-name {
+    width: 100%;
+    padding: 13px 14px;
+    border: 1px solid #DCE5DE;
+    border-radius: 12px;
+    font: inherit;
+    margin-bottom: 16px;
+}
+
+#schedule-name:focus { outline: 2px solid var(--fresh-mint); border-color: var(--growth-green); }
+
+.schedule-categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.schedule-categories input { position: absolute; opacity: 0; pointer-events: none; }
+
+.schedule-categories span {
+    display: inline-block;
+    padding: 8px 14px;
+    border-radius: 999px;
+    border: 2px solid transparent;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    opacity: 0.6;
+}
+
+.schedule-categories span.study { background-color: #E5ECFF; color: #3858C7; }
+.schedule-categories span.work { background-color: #DFF3EA; color: var(--growth-green); }
+.schedule-categories span.personal { background-color: #EDE7FB; color: #5B3FA8; }
+.schedule-categories span.meal { background-color: #FFF1D6; color: #8A5A00; }
+
+.schedule-categories input:checked + span { opacity: 1; border-color: currentColor; }
+.schedule-categories input:focus-visible + span { outline: 2px solid var(--forest-green); }
+
+.schedule-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 22px;
+}
+
+.schedule-actions span { flex: 1; }
+.link-button.danger { color: #B3261E; }
