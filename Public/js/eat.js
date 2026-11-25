@@ -1,305 +1,227 @@
-document.addEventListener
-("DOMContentLoaded", function () {
+(function () {
+    const el = (id) => document.getElementById(id);
 
-    
+    const FAV_KEY = 'njeflowFavMeals';
+    const GROCERY_KEY = 'njeflowGroceries';
 
-    // Store tasks
-    let tasks = JSON.parse(localStorage.getItem("njeflowTasks")) || [];
-    let activities = JSON.parse(localStorage.getItem("njeFlowActivities")) || [];
-    // Find the main content area
-    const mainContent = document.querySelector(".main-content");
+    let meals = [];          // what is currently listed
+    let showingFavs = false;
 
-    // Create the plan section
-    const planSection = document.createElement("section");
+    const readFavs = () => JSON.parse(localStorage.getItem(FAV_KEY) || '[]');
+    const readGroceries = () => JSON.parse(localStorage.getItem(GROCERY_KEY) || '[]');
+    const saveGroceries = (list) => {
+        localStorage.setItem(GROCERY_KEY, JSON.stringify(list));
+        window.dispatchEvent(new Event('njeflow:data'));
+    };
 
-    planSection.className = "plan-workspace";
-
-   planSection.innerHTML = `
-   <div class="section-heading">
-   <p class="section-label">Your plan</p>
-   <h2>Make today count.</h2>
-   <p>One task at a time. One step at a time.</p>
-   </div>
-
-   <div class="task-form">
-   <input type="text" id="taskInput"
-   placeholder="what do you need to do?">
-
-   <button id="addTaskButton">Add task +</button>
-   </div>
-
-   <div class="task-list" id="taskList"></div>
-   `;
-
-  // Put the task list on the Plan page
-  (document.getElementById("plan") || mainContent).appendChild(planSection);
-
-  // ---- Page switching: show only the page named in the URL hash ----
-  const pages = document.querySelectorAll(".page");
-  const navLinks = document.querySelectorAll("nav .nav-link");
-
-  function showPage() {
-    const id = location.hash.slice(1);
-    const target = document.querySelector(".page#" + CSS.escape(id)) || document.getElementById("overview");
-    pages.forEach(page => { page.hidden = page !== target; });
-    navLinks.forEach(link => {
-      link.classList.toggle("active", link.getAttribute("href") === "#" + target.id);
-    });
-    window.scrollTo(0, 0);
-  }
-
-  window.addEventListener("hashchange", showPage);
-  showPage();
-  
-   // Get the input, button and task list
-   const taskInput = document.getElementById("taskInput");
-   const addTaskButton = document.getElementById("addTaskButton");
-   const taskList = document.getElementById("taskList");
-
-function saveTasks() {
-    localStorage.setItem("njeflowTasks", JSON.stringify(tasks));
-    window.dispatchEvent(new Event("njeflow:data"));
-}
-
-// Other pages (Overview, Focus) can change tasks too: reload when they do
-window.addEventListener("njeflow:data", function () {
-    tasks = JSON.parse(localStorage.getItem("njeflowTasks")) || [];
-    activities = JSON.parse(localStorage.getItem("njeFlowActivities")) || [];
-    displayTasks();
-    if (typeof displayActivities === "function") displayActivities();
-});
-
-function displayTasks() {
-    taskList.innerHTML = "";
-
-    if (tasks.length === 0) {
-        taskList.textContent = "No tasks yet. Add your first task!";
-        return;
+    function escapeHtml(value) {
+        const div = document.createElement('div');
+        div.textContent = String(value ?? '');
+        return div.innerHTML;
     }
 
-    tasks.forEach(function (task) {
-
-        const taskItem = document.createElement("div");
-        taskItem.className = "task-item";
-
-        if (task.completed) { 
-            taskItem.classList.add("completed");
-        }
-
-        const taskName = document.createElement("span");
-        taskName.textContent = task.name;
-
-        if (task.when) {
-            const when = document.createElement("small");
-            when.className = "task-when";
-            when.textContent = task.when;
-            taskName.appendChild(when);
-        }
-
-        const actions = document.createElement("div");
-        actions.className = "task-actions";
-
-        const completeButton = document.createElement("button");
-
-            completeButton.textContent = task.completed
-            ? "Undo"
-            : "Complete";
-
-            completeButton.addEventListener("click", function () {
-
-                task.completed = !task.completed;
-
-                saveTasks();
-                displayTasks();
-            });
-
-            const deleteButton = document.createElement("button");
-
-            deleteButton.textContent = "Delete";
-
-            deleteButton.textContent = "Delete";
-
-            deleteButton.addEventListener("click", function () {
-
-                tasks = tasks.filter(function (item) {
-                    return item.id !== task.id;
-                });
-
-                saveTasks();
-                displayTasks();
-            });
-
-            actions.appendChild(completeButton);
-            actions.appendChild(deleteButton);
-
-            taskItem.appendChild(taskName);
-            taskItem.appendChild(actions);
-
-            taskList.appendChild(taskItem);
-
-    });
-
+    function setStatus(message, type = '') {
+        const s = el('meal-status');
+        s.textContent = message;
+        s.className = 'status ' + type;
     }
 
-    function addTask() {
+    function ingredientsOf(meal) {
+        const list = [];
+        for (let i = 1; i <= 20; i++) {
+            const name = (meal['strIngredient' + i] || '').trim();
+            if (name) list.push({ name, measure: (meal['strMeasure' + i] || '').trim() });
+        }
+        return list;
+    }
 
-        const taskName = taskInput.value.trim();
+    const isFav = (id) => readFavs().some((m) => m.idMeal === id);
 
-        if (taskName === "") {
-            alert("Please enter a task first.");
+    // ---------- search & list ----------
+    async function searchMeals(query) {
+        if (!query) return;
+        showingFavs = false;
+        el('meal-show-favs').textContent = 'Show favourites';
+        el('meal-results').innerHTML = '';
+        setStatus('Searching...', 'loading');
+
+        try {
+            let res;
+            try {
+                res = await fetch('/api/meals?q=' + encodeURIComponent(query));
+            } catch {
+                throw new Error('Network problem. Check your internet connection and try again.');
+            }
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok) throw new Error(data.error || 'Something went wrong. Please try again.');
+
+            meals = data.meals || [];
+            fillCategories();
+            if (!meals.length) {
+                setStatus(`No meals found for "${query}". Try another word.`);
+                return;
+            }
+            renderMeals();
+        } catch (err) {
+            meals = [];
+            fillCategories();
+            setStatus(err.message, 'error');
+        }
+    }
+
+    function fillCategories() {
+        const select = el('meal-category');
+        const categories = [...new Set(meals.map((m) => m.strCategory).filter(Boolean))].sort();
+        select.innerHTML = '<option value="all">All categories</option>' +
+            categories.map((c) => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');
+    }
+
+    function renderMeals() {
+        const category = el('meal-category').value;
+        const shown = meals.filter((m) => category === 'all' || m.strCategory === category);
+
+        if (!shown.length) {
+            el('meal-results').innerHTML = '';
+            setStatus(showingFavs ? 'No favourites yet. Tap ♡ on a meal to save it.' : 'No meals in this category.');
             return;
         }
 
-        const newTask = {
-            id: Date.now(),
-            name: taskName,
-            completed: false
-        };
-
-        tasks.push(newTask);
-
-        saveTasks();
-        displayTasks();
-
-        taskInput.value = "";
-        taskInput.focus();
-
-
+        setStatus(`${shown.length} ${showingFavs ? 'favourite' : 'meal'}${shown.length === 1 ? '' : 's'}`);
+        el('meal-results').innerHTML = shown.map((m) => `
+            <div class="meal-card" data-id="${escapeHtml(m.idMeal)}">
+                <img src="${escapeHtml(m.strMealThumb)}/preview" alt="" loading="lazy">
+                <button type="button" class="meal-fav ${isFav(m.idMeal) ? 'on' : ''}" data-fav="${escapeHtml(m.idMeal)}"
+                    aria-label="Save to favourites">${isFav(m.idMeal) ? '♥' : '♡'}</button>
+                <div class="meal-card-body">
+                    <h4>${escapeHtml(m.strMeal)}</h4>
+                    <span class="badge ok">${escapeHtml(m.strCategory || 'Meal')}</span>
+                    ${m.strArea ? `<span class="badge">${escapeHtml(m.strArea)}</span>` : ''}
+                </div>
+            </div>`).join('');
     }
 
-    addTaskButton.addEventListener("click", addTask);
-
-    taskInput.addEventListener("keydown", function (event) {
-
-        if (event.key === "Enter") {
-            addTask();
+    function toggleFav(id) {
+        let favs = readFavs();
+        if (favs.some((m) => m.idMeal === id)) {
+            favs = favs.filter((m) => m.idMeal !== id);
+        } else {
+            const meal = meals.find((m) => m.idMeal === id);
+            if (meal) favs.push(meal);
         }
-
-    });
-
-    // ---------- Weekly calendar: click a slot to schedule ----------
-    const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-    const dialog = document.getElementById("schedule-dialog");
-    const scheduleForm = document.getElementById("schedule-form");
-    const nameInput = document.getElementById("schedule-name");
-    const addTaskBox = document.getElementById("schedule-add-task");
-    const deleteBtn = document.getElementById("schedule-delete");
-    let slot = null;        // { day, time } being edited
-    let editing = null;     // activity being edited, or null for a new one
-
-    function saveActivities() {
-        // Saved first; saveTasks() then notifies everyone once both are stored
-        localStorage.setItem("njeFlowActivities", JSON.stringify(activities));
+        localStorage.setItem(FAV_KEY, JSON.stringify(favs));
+        if (showingFavs) meals = favs;
+        renderMeals();
     }
 
-    function linkedTask(activity) {
-        return activity.taskId ? tasks.find(t => t.id === activity.taskId) : null;
-    }
+    // ---------- recipe details ----------
+    function openMeal(id) {
+        const meal = meals.find((m) => m.idMeal === id);
+        if (!meal) return;
+        const ingredients = ingredientsOf(meal);
+        const steps = (meal.strInstructions || '')
+            .split(/\r?\n+/).map((s) => s.trim()).filter((s) => s && !/^step\s*\d+$/i.test(s));
 
-    // Tag every day cell with its day/time so clicks know where they are
-    document.querySelectorAll(".calendar-row").forEach(row => {
-        const time = row.children[0].textContent.trim();
-        DAYS.forEach((day, i) => {
-            const cell = row.children[i + 1];
-            if (!cell) return;
-            cell.classList.add("slot");
-            cell.dataset.day = day;
-            cell.dataset.time = time;
-            cell.title = `Schedule something on ${day} at ${time}`;
-        });
-    });
+        el('meal-detail').innerHTML = `
+            <img class="meal-detail-img" src="${escapeHtml(meal.strMealThumb)}" alt="">
+            <h3>${escapeHtml(meal.strMeal)}</h3>
+            <p class="section-text">${escapeHtml([meal.strCategory, meal.strArea].filter(Boolean).join(' · '))}</p>
 
-    function displayActivities() {
-        document.querySelectorAll(".calendar .slot .event").forEach(e => e.remove());
-        activities.forEach(activity => {
-            const cell = document.querySelector(
-                `.calendar .slot[data-day="${activity.day}"][data-time="${activity.time}"]`);
-            if (!cell) return;
+            <div class="ov-card-head">
+                <h4>Ingredients</h4>
+                <button type="button" class="primary-button" id="meal-add-groceries">Add all to grocery list</button>
+            </div>
+            <ul class="meal-ingredients">
+                ${ingredients.map((i) => `<li><strong>${escapeHtml(i.measure)}</strong> ${escapeHtml(i.name)}</li>`).join('')}
+            </ul>
 
-            const event = document.createElement("div");
-            const task = linkedTask(activity);
-            event.className = "event " + activity.category + (task && task.completed ? " done" : "");
-            event.textContent = activity.name;
-            event.title = "Click to edit";
-            event.addEventListener("click", e => {
-                e.stopPropagation();
-                openSchedule(activity.day, activity.time, activity);
+            <h4>Method</h4>
+            <ol class="meal-steps">${steps.map((s) => `<li>${escapeHtml(s)}</li>`).join('')}</ol>
+            ${meal.strYoutube ? `<p><a href="${escapeHtml(meal.strYoutube)}" target="_blank" rel="noopener">Watch the video -></a></p>` : ''}
+        `;
+
+        el('meal-add-groceries').addEventListener('click', (e) => {
+            const list = readGroceries();
+            const have = new Set(list.map((g) => g.name.toLowerCase()));
+            let added = 0;
+            ingredients.forEach((i, n) => {
+                const name = (i.measure ? i.measure + ' ' : '') + i.name;
+                if (!have.has(name.toLowerCase())) {
+                    list.push({ id: Date.now() + n, name, done: false });
+                    added++;
+                }
             });
-            cell.appendChild(event);
+            saveGroceries(list);
+            e.target.textContent = added ? `Added ${added} item${added === 1 ? '' : 's'} ✓` : 'Already on your list ✓';
+            e.target.disabled = true;
+        });
+
+        el('meal-dialog').showModal();
+    }
+
+    // ---------- grocery list ----------
+    function renderGroceries() {
+        const listEl = el('grocery-list');
+        const list = readGroceries();
+        listEl.innerHTML = '';
+        if (!list.length) {
+            listEl.innerHTML = '<li class="ov-empty">Your list is empty.</li>';
+            return;
+        }
+        list.forEach((item) => {
+            const li = document.createElement('li');
+            li.className = item.done ? 'done' : '';
+            li.innerHTML = '<label><input type="checkbox"> <span></span></label><button type="button" aria-label="Remove">×</button>';
+            const box = li.querySelector('input');
+            box.checked = item.done;
+            li.querySelector('span').textContent = item.name;
+            box.addEventListener('change', () =>
+                saveGroceries(readGroceries().map((g) => g.id === item.id ? { ...g, done: box.checked } : g)));
+            li.querySelector('button').addEventListener('click', () =>
+                saveGroceries(readGroceries().filter((g) => g.id !== item.id)));
+            listEl.appendChild(li);
         });
     }
 
-    function openSchedule(day, time, activity = null) {
-        slot = { day, time };
-        editing = activity;
-        document.getElementById("schedule-when").textContent = `${day} · ${time}`.toUpperCase();
-        document.getElementById("schedule-title").textContent =
-            activity ? "Edit this activity" : "What would you like to schedule?";
-        document.getElementById("schedule-save").textContent = activity ? "Save" : "Schedule";
-        nameInput.value = activity ? activity.name : "";
-        const category = activity ? activity.category : "study";
-        scheduleForm.querySelector(`input[value="${category}"]`).checked = true;
-        addTaskBox.checked = activity ? Boolean(linkedTask(activity)) : true;
-        deleteBtn.hidden = !activity;
-        dialog.showModal();
-        nameInput.focus();
-    }
-
-    document.querySelector(".calendar").addEventListener("click", e => {
-        const cell = e.target.closest(".slot");
-        if (cell) openSchedule(cell.dataset.day, cell.dataset.time);
-    });
-
-    scheduleForm.addEventListener("submit", e => {
+    // ---------- events ----------
+    el('meal-form').addEventListener('submit', (e) => {
         e.preventDefault();
-        const name = nameInput.value.trim();
-        if (!name) return nameInput.focus();
-        const category = scheduleForm.querySelector('input[name="schedule-category"]:checked').value;
-        const when = `${slot.day} · ${slot.time}`;
+        searchMeals(el('meal-query').value.trim());
+    });
+    el('meal-category').addEventListener('change', renderMeals);
 
-        const activity = editing || { id: Date.now(), day: slot.day, time: slot.time };
-        activity.name = name;
-        activity.category = category;
-
-        // Keep the matching task in "Your plan" in sync
-        let task = linkedTask(activity);
-        if (addTaskBox.checked) {
-            if (task) {
-                task.name = name;
-                task.when = when;
-            } else {
-                task = { id: Date.now() + 1, name, completed: false, when, activityId: activity.id };
-                tasks.push(task);
-                activity.taskId = task.id;
-            }
-        } else if (task) {
-            tasks = tasks.filter(t => t.id !== task.id);
-            delete activity.taskId;
-        }
-
-        if (!editing) activities.push(activity);
-        dialog.close();
-        saveActivities();
-        saveTasks();         // also notifies the other pages
+    el('meal-show-favs').addEventListener('click', () => {
+        showingFavs = !showingFavs;
+        el('meal-show-favs').textContent = showingFavs ? 'Back to search' : 'Show favourites';
+        meals = showingFavs ? readFavs() : [];
+        fillCategories();
+        if (showingFavs) renderMeals();
+        else { el('meal-results').innerHTML = ''; setStatus('Search for a meal to get started.'); }
     });
 
-    deleteBtn.addEventListener("click", () => {
-        if (!editing) return;
-        tasks = tasks.filter(t => t.id !== editing.taskId);
-        activities = activities.filter(a => a.id !== editing.id);
-        dialog.close();
-        saveActivities();
-        saveTasks();
+    el('meal-results').addEventListener('click', (e) => {
+        const fav = e.target.closest('[data-fav]');
+        if (fav) return toggleFav(fav.dataset.fav);
+        const card = e.target.closest('.meal-card');
+        if (card) openMeal(card.dataset.id);
     });
 
-    document.getElementById("schedule-cancel").addEventListener("click", () => dialog.close());
-    dialog.addEventListener("click", e => { if (e.target === dialog) dialog.close(); });
+    el('meal-dialog-close').addEventListener('click', () => el('meal-dialog').close());
+    el('meal-dialog').addEventListener('click', (e) => {
+        if (e.target === el('meal-dialog')) el('meal-dialog').close(); // click on backdrop
+    });
 
-displayActivities();
+    el('grocery-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = el('grocery-input').value.trim();
+        if (!name) return;
+        saveGroceries([...readGroceries(), { id: Date.now(), name, done: false }]);
+        el('grocery-input').value = '';
+    });
+    el('grocery-clear').addEventListener('click', () =>
+        saveGroceries(readGroceries().filter((g) => !g.done)));
 
-    displayTasks();
+    window.addEventListener('njeflow:data', renderGroceries);
 
-
-});
-
-
+    renderGroceries();
+    searchMeals('chicken'); // something to look at on first visit
+})();
