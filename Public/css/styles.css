@@ -1232,3 +1232,118 @@ a.hero-button {
 
 .schedule-actions span { flex: 1; }
 .link-button.danger { color: #B3261E; }
+
+/* ==============================
+   Sticky sidebar
+   ============================== */
+.sidebar {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+}
+
+/* ==============================
+   Wellness
+   ============================== */
+.wellness-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.wellness-habits { grid-column: 1 / -1; }
+
+.wellness-goal {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+.wellness-goal input {
+    width: 54px;
+    padding: 6px 8px;
+    border: 1px solid #DCE5DE;
+    border-radius: 8px;
+    font: inherit;
+}
+
+.wellness-big { color: var(--text-muted); margin-bottom: 14px; }
+.wellness-big strong { font-size: 34px; color: var(--forest-green); }
+
+.water-glasses {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 18px;
+}
+
+.water-glass {
+    width: 30px;
+    height: 40px;
+    border: 2px solid #9CC8E8;
+    border-top-width: 1px;
+    border-radius: 4px 4px 10px 10px;
+    background: linear-gradient(to top, #CFE8FA 0, #CFE8FA 0, transparent 0);
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.water-glass.full { background: linear-gradient(to top, #5AAEE6 0, #8CCBF2 85%, transparent 85%); }
+.water-glass:hover { border-color: #4A9AD4; }
+
+.wellness-row { display: flex; gap: 10px; }
+
+.mood-options {
+    display: flex;
+    justify-content: space-between;
+    gap: 6px;
+    margin-bottom: 14px;
+}
+
+.mood-options button {
+    flex: 1;
+    font-size: 28px;
+    padding: 8px 0;
+    border: 2px solid transparent;
+    border-radius: 14px;
+    background: var(--soft-cream);
+    cursor: pointer;
+    filter: grayscale(0.6);
+    transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+.mood-options button:hover { transform: scale(1.08); filter: none; }
+.mood-options button.active { border-color: var(--growth-green); background: #E7F5EE; filter: none; }
+
+.wellness-input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #DCE5DE;
+    border-radius: 10px;
+    font: inherit;
+    margin-bottom: 8px;
+}
+
+.wellness-sub { margin: 16px 0 10px; font-size: 14px; color: var(--forest-green); }
+
+.mood-week {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+    text-align: center;
+}
+
+.mood-day {
+    background: var(--soft-cream);
+    border-radius: 12px;
+    padding: 8px 0;
+}
+
+.mood-day span { display: block; font-size: 20px; }
+.mood-day small { font-size: 11px; color: var(--text-muted); }
+.mood-day.empty span { color: var(--text-muted); }
+
