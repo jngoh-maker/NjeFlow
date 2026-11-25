@@ -1,7 +1,12 @@
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '.env') });
 const express = require('express');
 const app = express();
-app.use(express.static('public'));
+// Folder is "Public" (capital P): Linux paths are case-sensitive
+app.use(express.static(path.join(__dirname, 'Public')));
+
+// Used by the load balancer to check this server is alive
+app.get('/health', (req, res) => res.json({ status: 'ok', server: require('os').hostname() }));
 
 const cache = new Map();
 const TTL = 10 * 60 * 1000;
@@ -74,4 +79,6 @@ app.get('/api/meals', async (req, res) => {
     });
 
 
-app.listen(process.env.PORT || 3000, () => console.log('NjeFlow running'));
+const PORT = process.env.PORT || 3000;
+const HOST = process.env.HOST || '0.0.0.0';
+app.listen(PORT, HOST, () => console.log(`NjeFlow running on http://${HOST}:${PORT}`));
