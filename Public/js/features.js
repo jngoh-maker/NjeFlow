@@ -120,6 +120,8 @@ async function loadWeather(city) {
         const data = await getJSON('/api/weather?city=' + encodeURIComponent(city));
         forecastDays = summarizeForecast(data.list);
         cityLabel = `${data.city.name}, ${data.city.country}`;
+        localStorage.setItem('njeflowCity', city); // Overview shows this city too
+        window.dispatchEvent(new Event('njeflow:data'));
         renderWeather();
     } catch (err) {
         forecastDays = [];
@@ -137,4 +139,6 @@ $('weather-form').addEventListener('submit', (e) => {
 $('weather-filter').addEventListener('change', renderWeather);
 $('weather-sort').addEventListener('change', renderWeather);
 
-loadWeather('Kigali'); // default city on page load
+const savedCity = localStorage.getItem('njeflowCity') || 'Kigali';
+$('weather-city').value = savedCity;
+loadWeather(savedCity); // last searched city (Kigali the first time)
