@@ -36,8 +36,8 @@
                <a href="#plan" class="nav-link">Plan</a>
                <a href="#focus" class="nav-link">Focus</a>
                <a href="#eat" class="nav-link">Eat</a>
-               <a href="#money" class="nav-link">Money</a>
-               <a href="#wellness" class="nav-link">Wellness</a>
+               <!-- <a href="#money" class="nav-link">Money</a> (coming soon) -->
+               <!-- <a href="#wellness" class="nav-link">Wellness</a> (coming soon) -->
             </nav>
 
             <div class="sidebar-bottom">
@@ -48,205 +48,153 @@
         </aside>
         
         <!-- Main content -->
-        <main class="main-content" id="overview">
+        <main class="main-content">
 
-            <!-- Welcome section -->
-             <section class="welcome-section">
+<!-- Overview page -->
+<div class="page" id="overview">
 
-                <div>
-                    <p class="section-label">WELCOME TO NJEFLOW</p>
-
-                    <h1>Make room for what matters.</h1>
-
-                    <p class="subtitle">
-                        A little structure can make your day feel lighter.    
-                    </p>
-
-                </div>
-
-                <button class="primary-button">
-                    + plan my day
-                </button>
-
-             </section>
-
-             <!-- Hero section -->
-              <section class="hero">
-
-                <div class="hero-content">
-
-                    <p class="hero-label">A FRESH START</p>
-
-                    <h2>Your life, one step at a time.</h2>
-
-                    <p>
-                        Plan your day, find your focus and build
-                    </p>
-
-                    <button class="hero-button">
-                        Get started ->
-                    </button>
-
-                </div>
-
-                <!-- Hero decoration -->
-                 <div class="hero-decoration">
-
-                        <div class="progress-card">
-
-                            <p>Your daily progress</p>
-
-                            <h3>75%</h3>
-
-                            <div class="progress-bar">
-
-                            <div class="progress-fill"></div>                            </div>
-                        
-
-                        <span>Keep your flow going!</span>
-
-                </div>
-
-            </div>
-                 
-              
+    <!-- Welcome section -->
+    <section class="welcome-section">
+        <div>
+            <p class="section-label" id="ov-date">TODAY</p>
+            <h1 id="ov-greeting">Make room for what matters.</h1>
+            <p class="subtitle" id="ov-subtitle">A little structure can make your day feel lighter.</p>
+        </div>
+        <a href="#plan" class="primary-button">+ Plan my day</a>
     </section>
 
-    <section class="schedule-section">
+    <!-- Hero: live daily progress -->
+    <section class="hero">
+        <div class="hero-content">
+            <p class="hero-label">YOUR DAY SO FAR</p>
+            <h2 id="ov-hero-title">Your life, one step at a time.</h2>
+            <p id="ov-hero-text">Add a task and start a focus session to get going.</p>
+            <a href="#focus" class="hero-button" id="ov-hero-button">Start focusing -></a>
+        </div>
+        <div class="hero-decoration">
+            <div class="progress-card">
+                <p>Tasks completed</p>
+                <h3 id="ov-progress-value">0%</h3>
+                <div class="progress-bar"><div class="progress-fill" id="ov-progress-fill" style="width:0%"></div></div>
+                <span id="ov-progress-note">No tasks yet</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Today dashboard -->
+    <section class="ov-dashboard">
+
+        <div class="ov-card">
+            <div class="ov-card-head"><h3>Up next</h3><a href="#plan">All tasks -></a></div>
+            <form class="ov-quick-add" id="ov-task-form">
+                <input type="text" id="ov-task-input" placeholder="Quick add a task..." maxlength="120">
+                <button type="submit">Add</button>
+            </form>
+            <ul class="ov-list" id="ov-tasks"></ul>
+        </div>
+
+        <div class="ov-card">
+            <div class="ov-card-head"><h3>Today's schedule</h3><a href="#plan">Week -></a></div>
+            <ul class="ov-list" id="ov-schedule"></ul>
+        </div>
+
+        <div class="ov-card">
+            <div class="ov-card-head"><h3>Weather</h3><a href="#weather">Forecast -></a></div>
+            <div id="ov-weather" class="ov-weather"><p class="ov-empty">Loading weather...</p></div>
+        </div>
+
+        <div class="ov-card">
+            <div class="ov-card-head"><h3>Focus today</h3><a href="#focus">Timer -></a></div>
+            <div class="ov-stats">
+                <div><strong id="ov-focus-sessions">0</strong><span>sessions</span></div>
+                <div><strong id="ov-focus-minutes">0</strong><span>minutes</span></div>
+                <div><strong id="ov-streak">0</strong><span>day streak</span></div>
+            </div>
+            <p class="ov-empty" id="ov-focus-note"></p>
+        </div>
+
+    </section>
+
+    <!--Modules section -->
+    <section class="modules-section">
 
         <div class="section-heading">
-        <p class="section-label">YOUR WEEK</p>
-        <h2>Your Schedule</h2>
-        <p>Make time for what matters.</p>
+
+        <p class="section-label">YOUR WORKSPACE</p> 
+        
+        <h2>Everything in one place.</h2>
+
+        <p>
+            Choose an area of your life you'd like to work on.
+        </p>
     </div>
 
-<form class="calendar-form" id="calendar-form">
+    <div class="module-grid">
 
-    <input
-        type="text"
-        id="activity-name"
-        placeholder="What are you planning?"
-        required
-    >
+        <!-- Plan -->
+    <div class="module-card">
 
-    <select id="activity-day" required>
-        <option value="">Choose a day</option>
-        <option value="Mon">Monday</option>
-        <option value="Tue">Tuesday</option>
-        <option value="Wed">Wednesday</option>
-        <option value="Thu">Thursday</option>
-        <option value="Fri">Friday</option>
-        <option value="Sat">Saturday</option>
-        <option value="Sun">Sunday</option>
-    </select>
+        <span class="module-number">01</span>
 
-    <select id="activity-time" required>
-        <option value="">Choose a time</option>
-        <option value="8 AM">8 AM</option>
-        <option value="10 AM">10 AM</option>
-        <option value="12 PM">12 PM</option>
-        <option value="2 PM">2 PM</option>
-        <option value="4 PM">4 PM</option>
-        <option value="6 PM">6 PM</option>
-    </select>
+        <h3>Plan</h3>
 
+        <p>
+            Organize your tasks and make time for what matters.
+        </p>
 
-    <select id="activity-category" required>
-        <option value="">Choose a category</option>
-        <option value="study">Study</option>
-        <option value="work">Work</option>
-        <option value="personal">Personal</option>
-        <option value="meal">Meal</option>
-    </select>
-
-    <button type="submit">Add activity +</button>
-
-</form>
-
-    <div class="calendar">
-
-        <div class="calendar-header">
-            <div>Time</div>
-            <div>Mon</div>
-            <div>Tue</div>
-            <div>Wed</div>
-            <div>Thu</div>
-            <div>Fri</div>
-            <div>Sat</div>
-            <div>Sun</div>
-        </div>
-
-        <div class="calendar-row">
-            <div class="time">8 AM</div>
-            <div class="event study">Study</div>
-            <div></div>
-            <div class="event study">Lectures</div>
-            <div></div>
-            <div class="event work">Project</div>
-            <div></div>
-            <div></div>
-        </div>
-
-            <div class="calendar-row">
-                <div class="time">10 AM</div>
-                <div></div>
-                <div class="event work">Project work</div>
-                <div></div>
-                <div class="event study">Study</div>
-                <div></div>
-                <div class="event personal">Gym</div>
-                <div></div>
-            </div>
-
-            <div class="calendar-row">
-                <div class="time">12 PM</div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div class="event study">Planning</div>
-        </div>
-
-        <div class="calendar-row">
-            <div class="time">2 PM</div>
-            <div class="event personal">Gym</div>
-            <div class="event meal">Meal prep</div>
-            <div></div>
-            <div></div>
-            <div class="event work">Project work</div>
-            <div></div>
-            <div></div>
-        </div>
-
-        <div class="calendar-row">
-            <div class="time">4 PM</div>
-            <div></div>
-            <div></div>
-            <div class="event personal">Focus time</div>
-            <div></div>
-            <div></div>
-            <div class="event personal">Relax</div>
-            <div></div>
-        </div>
-
-        <div class="calendar-row">
-            <div class="time">6 PM</div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div class="event meal">Dinner</div>
-            <div></div>
-            <div></div>
-            <div></div>
-        </div>
+        <a href="#plan">Explore -></a>
 
     </div>
+
+    <!-- Focus -->
+     <div class="module-card">
+
+        <span class="module-number">02</span>
+
+        <h3>Focus</h3>
+
+        <p>
+            Break tasks into steps and overcome procrastination.
+        </p>
+
+        <a href="#focus">Explore -></a>
+
+     </div> 
+
+     <!-- Eat -->
+      <div class="module-card">
+
+        <span class="module-number">03</span>
+
+        <h3>Eat</h3>
+
+        <p>
+            Discover meals, plan your menu and manage groceries.
+        </p>
+
+        <a href="#eat">Explore -></a>
+
+        </div>
+
+        </div>
 
 </section>
+
+
+<!-- Closing section -->
+<section class="closing-section">
+
+    <h2>Better days start with small steps.</h2>
+
+    <p>Your life. Your pace. Your flow.</p>
+
+</section>
+</div>
+
+<!-- Weather page -->
+<div class="page" id="weather" hidden>
 <!-- Weather section -->
- <section class="api-section" id="weather">
+ <section class="api-section">
 
     <p class="section-label">Weather</p>
     <h2>Plan around the forecast</h2>
@@ -276,112 +224,252 @@
         <div class="card-grid" id="weather-results"></div>
 
     </section>
+</div>
 
-
-    <!--Modules section -->
-    <section class="modules-section">
+<!-- Plan page -->
+<div class="page" id="plan" hidden>
+    <section class="schedule-section">
 
         <div class="section-heading">
-
-        <p class="section-label">YOUR WORKSPACE</p> 
-        
-        <h2>Everything in one place.</h2>
-
-        <p>
-            Choose an area of your life you'd like to work on.
-        </p>
+        <p class="section-label">YOUR WEEK</p>
+        <h2>Your Schedule</h2>
+        <p>Make time for what matters.</p>
     </div>
 
-    <div class="module-grid">
+<p class="calendar-hint">Tip: click any slot in the calendar to schedule something there.</p>
 
-        <!-- Plan -->
-    <div class="module-card" id="plan">
+    <div class="calendar">
 
-        <span class="module-number">01</span>
+        <div class="calendar-header">
+            <div>Time</div>
+            <div>Mon</div>
+            <div>Tue</div>
+            <div>Wed</div>
+            <div>Thu</div>
+            <div>Fri</div>
+            <div>Sat</div>
+            <div>Sun</div>
+        </div>
 
-        <h3>Plan</h3>
+        <div class="calendar-row">
+            <div class="time">8 AM</div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
 
-        <p>
-            Organize your tasks and make time for what matters.
-        </p>
+            <div class="calendar-row">
+                <div class="time">10 AM</div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
 
-        <a href="#">Explore -></a>
+            <div class="calendar-row">
+                <div class="time">12 PM</div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+        </div>
+
+        <div class="calendar-row">
+            <div class="time">2 PM</div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+
+        <div class="calendar-row">
+            <div class="time">4 PM</div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+
+        <div class="calendar-row">
+            <div class="time">6 PM</div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
 
     </div>
-
-    <!-- Focus -->
-     <div class="module-card" id="focus">
-
-        <span class="module-number">02</span>
-
-        <h3>Focus</h3>
-
-        <p>
-            Break tasks into steps and overcome procrastination.
-        </p>
-
-        <a href="#">Explore -></a>
-
-     </div> 
-
-     <!-- Eat -->
-      <div class="module-card" id="eat">
-
-        <span class="module-number">03</span>
-
-        <h3>Eat</h3>
-
-        <p>
-            Discover meals, plan your menu and manage groceries.
-        </p>
-
-        <a href="#">Explore -></a>
-
-        </div>
-
-        <!-- Money -->
-         <div class="module-card" id="money">
-
-            <span class="module-number">04</span>
-
-            <h3>Money</h3>
-
-            <p>
-                Track spending, manage budgets and save smarter.
-            </p>
-
-            <a href="#">Explore -></a>
-
-         </div>
-
-         <!-- Wellness -->
-          <div class="module-card" id="wellness">
-
-          <span class="module-number">05</span>
-
-          <h3>Wellness</h3>
-
-          <p>
-            Track water, build habits and take care of yourself.
-          </p>
-
-          <a href="#">Explore -></a>
-
-          </div>
-
-        </div>
 
 </section>
 
+    <!-- Schedule modal -->
+    <dialog class="schedule-dialog" id="schedule-dialog">
+        <form id="schedule-form" method="dialog">
+            <p class="section-label" id="schedule-when">MON · 8 AM</p>
+            <h3 id="schedule-title">What would you like to schedule?</h3>
 
-<!-- Closing section -->
-<section class="closing-section">
+            <input type="text" id="schedule-name" placeholder="e.g. Study maths, Gym, Lunch with Ana" maxlength="60" required>
 
-    <h2>Better days start with small steps.</h2>
+            <div class="schedule-categories" role="radiogroup" aria-label="Category">
+                <label><input type="radio" name="schedule-category" value="study" checked><span class="study">Study</span></label>
+                <label><input type="radio" name="schedule-category" value="work"><span class="work">Work</span></label>
+                <label><input type="radio" name="schedule-category" value="personal"><span class="personal">Personal</span></label>
+                <label><input type="radio" name="schedule-category" value="meal"><span class="meal">Meal</span></label>
+            </div>
 
-    <p>Your life. Your pace. Your flow.</p>
+            <label class="focus-check" id="schedule-plan-row">
+                <input type="checkbox" id="schedule-add-task" checked>
+                Also add it to my plan (task list)
+            </label>
 
+            <div class="schedule-actions">
+                <button type="button" class="link-button danger" id="schedule-delete" hidden>Delete</button>
+                <span></span>
+                <button type="button" class="ghost-button" id="schedule-cancel">Cancel</button>
+                <button type="submit" class="primary-button" id="schedule-save">Schedule</button>
+            </div>
+        </form>
+    </dialog>
+</div>
+
+<!-- Focus page -->
+<div class="page" id="focus" hidden>
+<section class="api-section">
+    <p class="section-label">Focus</p>
+    <h2>One thing at a time.</h2>
+    <p class="section-text">Pick a task, start the timer, and take a short break when it rings.</p>
+
+    <div class="focus-layout">
+        <div class="focus-timer-card">
+            <div class="focus-modes" role="tablist">
+                <button type="button" class="focus-mode active" data-mode="focus">Focus</button>
+                <button type="button" class="focus-mode" data-mode="short">Short break</button>
+                <button type="button" class="focus-mode" data-mode="long">Long break</button>
+            </div>
+
+            <div class="focus-ring">
+                <svg viewBox="0 0 120 120" aria-hidden="true">
+                    <circle class="focus-ring-track" cx="60" cy="60" r="54"></circle>
+                    <circle class="focus-ring-fill" id="focus-ring-fill" cx="60" cy="60" r="54"></circle>
+                </svg>
+                <div class="focus-time" id="focus-time" role="timer">25:00</div>
+            </div>
+
+            <p class="focus-current" id="focus-current">No task selected</p>
+
+            <div class="focus-controls">
+                <button type="button" class="primary-button" id="focus-start">Start</button>
+                <button type="button" class="ghost-button" id="focus-reset">Reset</button>
+                <button type="button" class="ghost-button" id="focus-skip">Skip</button>
+            </div>
+        </div>
+
+        <div class="focus-side">
+            <div class="ov-card">
+                <h3>What are you working on?</h3>
+                <select id="focus-task"></select>
+                <label class="focus-check">
+                    <input type="checkbox" id="focus-complete-task">
+                    Mark the task done when this session ends
+                </label>
+            </div>
+
+            <div class="ov-card">
+                <h3>Settings (minutes)</h3>
+                <div class="focus-settings">
+                    <label>Focus <input type="number" id="focus-len" min="1" max="120" value="25"></label>
+                    <label>Short <input type="number" id="short-len" min="1" max="30" value="5"></label>
+                    <label>Long <input type="number" id="long-len" min="1" max="60" value="15"></label>
+                </div>
+            </div>
+
+            <div class="ov-card">
+                <div class="ov-card-head"><h3>Today's sessions</h3><button type="button" class="link-button" id="focus-clear">Clear today</button></div>
+                <ul class="ov-list" id="focus-log"></ul>
+            </div>
+        </div>
+    </div>
 </section>
+</div>
+
+<!-- Eat page -->
+<div class="page" id="eat" hidden>
+<section class="api-section">
+    <p class="section-label">Eat</p>
+    <h2>Find something good to cook.</h2>
+    <p class="section-text">Search recipes, save favourites, and build your grocery list as you go.</p>
+
+    <form class="toolbar" id="meal-form">
+        <input type="text" id="meal-query" placeholder="Search a meal, e.g. chicken" maxlength="50" required>
+        <button type="submit" class="primary-button">Search</button>
+    </form>
+
+    <div class="toolbar">
+        <select id="meal-category">
+            <option value="all">All categories</option>
+        </select>
+        <button type="button" class="ghost-button" id="meal-show-favs">Show favourites</button>
+    </div>
+
+    <p class="status" id="meal-status" role="status"></p>
+
+    <div class="eat-layout">
+        <div class="card-grid" id="meal-results"></div>
+
+        <aside class="ov-card eat-grocery">
+            <div class="ov-card-head"><h3>Grocery list</h3><button type="button" class="link-button" id="grocery-clear">Clear done</button></div>
+            <form class="ov-quick-add" id="grocery-form">
+                <input type="text" id="grocery-input" placeholder="Add an item..." maxlength="80">
+                <button type="submit">Add</button>
+            </form>
+            <ul class="ov-list" id="grocery-list"></ul>
+        </aside>
+    </div>
+
+    <!-- Recipe details -->
+    <dialog class="meal-dialog" id="meal-dialog">
+        <button type="button" class="meal-dialog-close" id="meal-dialog-close" aria-label="Close">&times;</button>
+        <div id="meal-detail"></div>
+    </dialog>
+</section>
+</div>
+
+<!-- Money page -->
+<div class="page" id="money" hidden>
+<section class="api-section">
+    <p class="section-label">Money</p>
+    <h2>Track spending and save smarter.</h2>
+    <p class="section-text">This space is coming soon.</p>
+</section>
+</div>
+
+<!-- Wellness page -->
+<div class="page" id="wellness" hidden>
+<section class="api-section">
+    <p class="section-label">Wellness</p>
+    <h2>Take care of yourself.</h2>
+    <p class="section-text">This space is coming soon.</p>
+</section>
+</div>
 
 <!-- Footer -->
  <footer class="footer">
@@ -404,6 +492,9 @@
     
     <script src="js/app.js"></script>
     <script src="js/features.js"></script>
+    <script src="js/focus.js"></script>
+    <script src="js/eat.js"></script>
+    <script src="js/overview.js"></script>
 
 </body>
 </html>
