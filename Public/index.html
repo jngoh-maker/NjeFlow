@@ -37,12 +37,12 @@
                <a href="#focus" class="nav-link">Focus</a>
                <a href="#eat" class="nav-link">Eat</a>
                <!-- <a href="#money" class="nav-link">Money</a> (coming soon) -->
-               <!-- <a href="#wellness" class="nav-link">Wellness</a> (coming soon) -->
+               <a href="#wellness" class="nav-link">Wellness</a>
             </nav>
 
             <div class="sidebar-bottom">
                 <p>Small steps count.</p>
-                <a href="#" class="nav-link"> Settings</a>
+                <!-- <a href="#" class="nav-link"> Settings</a> (hidden until built) -->
             </div>
 
         </aside>
@@ -113,6 +113,16 @@
             <p class="ov-empty" id="ov-focus-note"></p>
         </div>
 
+        <div class="ov-card">
+            <div class="ov-card-head"><h3>Wellness</h3><a href="#wellness">Check in -></a></div>
+            <div class="ov-stats">
+                <div><strong id="ov-water">0/8</strong><span>glasses</span></div>
+                <div><strong id="ov-mood">–</strong><span>mood</span></div>
+                <div><strong id="ov-habits">0/0</strong><span>habits</span></div>
+            </div>
+            <p class="ov-empty" id="ov-wellness-note"></p>
+        </div>
+
     </section>
 
     <!--Modules section -->
@@ -174,6 +184,16 @@
 
         <a href="#eat">Explore -></a>
 
+        </div>
+
+        <!-- Wellness -->
+        <div class="module-card">
+            <span class="module-number">04</span>
+            <h3>Wellness</h3>
+            <p>
+                Track water, build habits and take care of yourself.
+            </p>
+            <a href="#wellness">Explore -></a>
         </div>
 
         </div>
@@ -467,7 +487,53 @@
 <section class="api-section">
     <p class="section-label">Wellness</p>
     <h2>Take care of yourself.</h2>
-    <p class="section-text">This space is coming soon.</p>
+    <p class="section-text">Small daily habits add up. Check in with yourself and keep your streaks going.</p>
+
+    <div class="wellness-grid">
+
+        <!-- Water -->
+        <div class="ov-card">
+            <div class="ov-card-head">
+                <h3>Water</h3>
+                <label class="wellness-goal">Goal
+                    <input type="number" id="water-goal" min="1" max="20" value="8"> glasses
+                </label>
+            </div>
+            <p class="wellness-big"><strong id="water-count">0</strong> / <span id="water-goal-label">8</span> glasses</p>
+            <div class="water-glasses" id="water-glasses"></div>
+            <div class="wellness-row">
+                <button type="button" class="primary-button" id="water-add">+ 1 glass</button>
+                <button type="button" class="ghost-button" id="water-remove">Undo</button>
+            </div>
+        </div>
+
+        <!-- Mood -->
+        <div class="ov-card">
+            <h3>How are you feeling today?</h3>
+            <div class="mood-options" id="mood-options">
+                <button type="button" data-mood="1" title="Awful">😞</button>
+                <button type="button" data-mood="2" title="Low">😕</button>
+                <button type="button" data-mood="3" title="Okay">😐</button>
+                <button type="button" data-mood="4" title="Good">🙂</button>
+                <button type="button" data-mood="5" title="Great">😄</button>
+            </div>
+            <input type="text" class="wellness-input" id="mood-note" placeholder="Add a note (optional)" maxlength="140">
+            <p class="ov-empty" id="mood-status"></p>
+            <h4 class="wellness-sub">Last 7 days</h4>
+            <div class="mood-week" id="mood-week"></div>
+        </div>
+
+        <!-- Habits -->
+        <div class="ov-card wellness-habits">
+            <div class="ov-card-head"><h3>Daily habits</h3><span class="ov-empty" id="habit-progress"></span></div>
+            <form class="ov-quick-add" id="habit-form">
+                <input type="text" id="habit-input" placeholder="New habit, e.g. 10 min walk" maxlength="60">
+                <button type="submit">Add</button>
+            </form>
+            <ul class="ov-list" id="habit-list"></ul>
+        </div>
+
+    </div>
 </section>
 </div>
 
@@ -494,6 +560,7 @@
     <script src="js/features.js"></script>
     <script src="js/focus.js"></script>
     <script src="js/eat.js"></script>
+    <script src="js/wellness.js"></script>
     <script src="js/overview.js"></script>
 
 </body>
