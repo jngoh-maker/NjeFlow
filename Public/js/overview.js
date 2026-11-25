@@ -174,6 +174,26 @@
         }
     }
 
+    // ---------- wellness ----------
+    function renderWellness() {
+        const today = todayKey();
+        const water = JSON.parse(localStorage.getItem('njeflowWater') || '{}');
+        const goal = water.goal || 8;
+        const glasses = water[today] || 0;
+        const mood = (JSON.parse(localStorage.getItem('njeflowMood') || '{}'))[today];
+        const habits = read('njeflowHabits');
+        const habitsDone = habits.filter((h) => h.days.includes(today)).length;
+
+        el('ov-water').textContent = `${glasses}/${goal}`;
+        el('ov-mood').textContent = mood ? ['', '😞', '😕', '😐', '🙂', '😄'][mood.mood] : '–';
+        el('ov-habits').textContent = `${habitsDone}/${habits.length}`;
+        el('ov-wellness-note').textContent =
+            !mood ? "You haven't checked in today. How are you feeling?"
+            : glasses < goal ? `${goal - glasses} more glass${goal - glasses === 1 ? '' : 'es'} of water to go.`
+            : habits.length && habitsDone < habits.length ? 'Water goal reached. A few habits left today.'
+            : 'You are taking great care of yourself today.';
+    }
+
     // ---------- refresh ----------
     function refresh() {
         const tasks = read('njeflowTasks');
@@ -183,6 +203,7 @@
         renderTasks(tasks);
         renderSchedule();
         renderWeather();
+        renderWellness();
     }
 
     window.addEventListener('njeflow:data', refresh);
