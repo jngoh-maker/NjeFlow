@@ -1,8 +1,6 @@
 document.addEventListener
 ("DOMContentLoaded", function () {
-
     
-
     // Store tasks
     let tasks = JSON.parse(localStorage.getItem("njeflowTasks")) || [];
     let activities = JSON.parse(localStorage.getItem("njeFlowActivities")) || [];
@@ -40,7 +38,7 @@ document.addEventListener
 
   function showPage() {
     const id = location.hash.slice(1);
-    const target = document.querySelector(".page#" + CSS.escape(id)) || document.getElementById("overview");
+    const target = (id && document.querySelector(".page#" + CSS.escape(id))) || document.getElementById("overview");
     pages.forEach(page => { page.hidden = page !== target; });
     navLinks.forEach(link => {
       link.classList.toggle("active", link.getAttribute("href") === "#" + target.id);
@@ -301,5 +299,4 @@ displayActivities();
 
 
 });
-
 
