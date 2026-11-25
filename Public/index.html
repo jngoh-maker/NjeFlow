@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>NjeFlow | Your life. In flow.</title>
+
+    <link rel="stylesheet" href="css/styles.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+
+</head>
+
+<body>
+
+    <div class="app-container">
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+
+            <div class="logo">
+                <span>NjeFlow</span>
+            </div>
+
+            <p class="menu-heading">WORKSPACE</p>
+
+            <nav>
+               <a href="#overview" class="nav-link active">Overview</a>
+               <a href="#weather" class="nav-link">Weather</a>
+               <a href="#plan" class="nav-link">Plan</a>
+               <a href="#focus" class="nav-link">Focus</a>
+               <a href="#eat" class="nav-link">Eat</a>
+               <a href="#money" class="nav-link">Money</a>
+               <a href="#wellness" class="nav-link">Wellness</a>
+            </nav>
+
+            <div class="sidebar-bottom">
+                <p>Small steps count.</p>
+                <a href="#" class="nav-link"> Settings</a>
+            </div>
+
+        </aside>
+        
+        <!-- Main content -->
+        <main class="main-content" id="overview">
+
+            <!-- Welcome section -->
+             <section class="welcome-section">
+
+                <div>
+                    <p class="section-label">WELCOME TO NJEFLOW</p>
+
+                    <h1>Make room for what matters.</h1>
+
+                    <p class="subtitle">
+                        A little structure can make your day feel lighter.    
+                    </p>
+
+                </div>
+
+                <button class="primary-button">
+                    + plan my day
+                </button>
+
+             </section>
+
+             <!-- Hero section -->
+              <section class="hero">
+
+                <div class="hero-content">
+
+                    <p class="hero-label">A FRESH START</p>
+
+                    <h2>Your life, one step at a time.</h2>
+
+                    <p>
+                        Plan your day, find your focus and build
+                    </p>
+
+                    <button class="hero-button">
+                        Get started ->
+                    </button>
+
+                </div>
+
+                <!-- Hero decoration -->
+                 <div class="hero-decoration">
+
+                        <div class="progress-card">
+
+                            <p>Your daily progress</p>
+
+                            <h3>75%</h3>
+
+                            <div class="progress-bar">
+
+                            <div class="progress-fill"></div>                            </div>
+                        
+
+                        <span>Keep your flow going!</span>
+
+                </div>
+
+            </div>
+                 
+              
+    </section>
+
+    <section class="schedule-section">
+
+        <div class="section-heading">
+        <p class="section-label">YOUR WEEK</p>
+        <h2>Your Schedule</h2>
+        <p>Make time for what matters.</p>
+    </div>
+
+<form class="calendar-form" id="calendar-form">
+
+    <input
+        type="text"
+        id="activity-name"
+        placeholder="What are you planning?"
+        required
+    >
+
+    <select id="activity-day" required>
+        <option value="">Choose a day</option>
+        <option value="Mon">Monday</option>
+        <option value="Tue">Tuesday</option>
+        <option value="Wed">Wednesday</option>
+        <option value="Thu">Thursday</option>
+        <option value="Fri">Friday</option>
+        <option value="Sat">Saturday</option>
+        <option value="Sun">Sunday</option>
+    </select>
+
+    <select id="activity-time" required>
+        <option value="">Choose a time</option>
+        <option value="8 AM">8 AM</option>
+        <option value="10 AM">10 AM</option>
+        <option value="12 PM">12 PM</option>
+        <option value="2 PM">2 PM</option>
+        <option value="4 PM">4 PM</option>
+        <option value="6 PM">6 PM</option>
+    </select>
+
+
+    <select id="activity-category" required>
+        <option value="">Choose a category</option>
+        <option value="study">Study</option>
+        <option value="work">Work</option>
+        <option value="personal">Personal</option>
+        <option value="meal">Meal</option>
+    </select>
+
+    <button type="submit">Add activity +</button>
+
+</form>
+
+    <div class="calendar">
+
+        <div class="calendar-header">
+            <div>Time</div>
+            <div>Mon</div>
+            <div>Tue</div>
+            <div>Wed</div>
+            <div>Thu</div>
+            <div>Fri</div>
+            <div>Sat</div>
+            <div>Sun</div>
+        </div>
+
+        <div class="calendar-row">
+            <div class="time">8 AM</div>
+            <div class="event study">Study</div>
+            <div></div>
+            <div class="event study">Lectures</div>
+            <div></div>
+            <div class="event work">Project</div>
+            <div></div>
+            <div></div>
+        </div>
+
+            <div class="calendar-row">
+                <div class="time">10 AM</div>
+                <div></div>
+                <div class="event work">Project work</div>
+                <div></div>
+                <div class="event study">Study</div>
+                <div></div>
+                <div class="event personal">Gym</div>
+                <div></div>
+            </div>
+
+            <div class="calendar-row">
+                <div class="time">12 PM</div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div class="event study">Planning</div>
+        </div>
+
+        <div class="calendar-row">
+            <div class="time">2 PM</div>
+            <div class="event personal">Gym</div>
+            <div class="event meal">Meal prep</div>
+            <div></div>
+            <div></div>
+            <div class="event work">Project work</div>
+            <div></div>
+            <div></div>
+        </div>
+
+        <div class="calendar-row">
+            <div class="time">4 PM</div>
+            <div></div>
+            <div></div>
+            <div class="event personal">Focus time</div>
+            <div></div>
+            <div></div>
+            <div class="event personal">Relax</div>
+            <div></div>
+        </div>
+
+        <div class="calendar-row">
+            <div class="time">6 PM</div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div class="event meal">Dinner</div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+
+    </div>
+
+</section>
+<!-- Weather section -->
+ <section class="api-section" id="weather">
+
+    <p class="section-label">Weather</p>
+    <h2>Plan around the forecast</h2>
+    <p class="section-text">Search any city and see the next few days at a glance.</p>
+
+    <form class="toolbar" id="weather-form">
+        <input type="text" id="weather-city" placeholder="Search a city, e.g. Kigali" maxlength="60" required>
+        <button type="submit" class="primary-button">Search</button>
+    </form>
+
+    <div class="toolbar">
+        <select id="weather-filter">
+            <option value="all">All conditions</option>
+            <option value="rain">Rainy</option>
+            <option value="clear">Clear / sunny</option>
+            <option value="clouds">Cloudy</option>
+        </select>
+
+        <select id="weather-sort">
+            <option value="date">Sort by date</option>
+            <option value="hot">Hottest first</option>
+            <option value="cold">Coolest first</option>
+        </select>
+        </div>
+
+        <p class="status" id="weather-status" role="status"></p>
+        <div class="card-grid" id="weather-results"></div>
+
+    </section>
+
+
+    <!--Modules section -->
+    <section class="modules-section">
+
+        <div class="section-heading">
+
+        <p class="section-label">YOUR WORKSPACE</p> 
+        
+        <h2>Everything in one place.</h2>
+
+        <p>
+            Choose an area of your life you'd like to work on.
+        </p>
+    </div>
+
+    <div class="module-grid">
+
+        <!-- Plan -->
+    <div class="module-card" id="plan">
+
+        <span class="module-number">01</span>
+
+        <h3>Plan</h3>
+
+        <p>
+            Organize your tasks and make time for what matters.
+        </p>
+
+        <a href="#">Explore -></a>
+
+    </div>
+
+    <!-- Focus -->
+     <div class="module-card" id="focus">
+
+        <span class="module-number">02</span>
+
+        <h3>Focus</h3>
+
+        <p>
+            Break tasks into steps and overcome procrastination.
+        </p>
+
+        <a href="#">Explore -></a>
+
+     </div> 
+
+     <!-- Eat -->
+      <div class="module-card" id="eat">
+
+        <span class="module-number">03</span>
+
+        <h3>Eat</h3>
+
+        <p>
+            Discover meals, plan your menu and manage groceries.
+        </p>
+
+        <a href="#">Explore -></a>
+
+        </div>
+
+        <!-- Money -->
+         <div class="module-card" id="money">
+
+            <span class="module-number">04</span>
+
+            <h3>Money</h3>
+
+            <p>
+                Track spending, manage budgets and save smarter.
+            </p>
+
+            <a href="#">Explore -></a>
+
+         </div>
+
+         <!-- Wellness -->
+          <div class="module-card" id="wellness">
+
+          <span class="module-number">05</span>
+
+          <h3>Wellness</h3>
+
+          <p>
+            Track water, build habits and take care of yourself.
+          </p>
+
+          <a href="#">Explore -></a>
+
+          </div>
+
+        </div>
+
+</section>
+
+
+<!-- Closing section -->
+<section class="closing-section">
+
+    <h2>Better days start with small steps.</h2>
+
+    <p>Your life. Your pace. Your flow.</p>
+
+</section>
+
+<!-- Footer -->
+ <footer class="footer">
+
+    <div class="logo">
+        <span>NjeFlow</span>
+    </div>
+
+    <p>Make everyday life flow better.</p>
+
+    <p>&copy; 2026 NjeFlow. All rights reserved.</p>
+
+
+    </footer>
+                
+        </main>
+
+    </div>
+
+    
+    <script src="js/app.js"></script>
+    <script src="js/features.js"></script>
+
+</body>
+</html>
