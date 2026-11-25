@@ -1,8 +1,3 @@
-// ==============================
-// NJEFLOW - MAIN JAVASCRIPT
-// ==============================
-
-
 document.addEventListener
 ("DOMContentLoaded", function () {
 
@@ -36,13 +31,25 @@ document.addEventListener
    <div class="task-list" id="taskList"></div>
    `;
 
-  const closingSection = document.querySelector(".closing-section")
-  if (closingSection && closingSection.parentNode) {
-    closingSection.parentNode.insertBefore(planSection, closingSection);
-  } else {
-    mainContent.appendChild(planSection);
+  // Put the task list on the Plan page
+  (document.getElementById("plan") || mainContent).appendChild(planSection);
+
+  // ---- Page switching: show only the page named in the URL hash ----
+  const pages = document.querySelectorAll(".page");
+  const navLinks = document.querySelectorAll("nav .nav-link");
+
+  function showPage() {
+    const id = location.hash.slice(1);
+    const target = document.querySelector(".page#" + CSS.escape(id)) || document.getElementById("overview");
+    pages.forEach(page => { page.hidden = page !== target; });
+    navLinks.forEach(link => {
+      link.classList.toggle("active", link.getAttribute("href") === "#" + target.id);
+    });
+    window.scrollTo(0, 0);
   }
 
+  window.addEventListener("hashchange", showPage);
+  showPage();
   
    // Get the input, button and task list
    const taskInput = document.getElementById("taskInput");
@@ -51,7 +58,16 @@ document.addEventListener
 
 function saveTasks() {
     localStorage.setItem("njeflowTasks", JSON.stringify(tasks));
+    window.dispatchEvent(new Event("njeflow:data"));
 }
+
+// Other pages (Overview, Focus) can change tasks too: reload when they do
+window.addEventListener("njeflow:data", function () {
+    tasks = JSON.parse(localStorage.getItem("njeflowTasks")) || [];
+    activities = JSON.parse(localStorage.getItem("njeFlowActivities")) || [];
+    displayTasks();
+    if (typeof displayActivities === "function") displayActivities();
+});
 
 function displayTasks() {
     taskList.innerHTML = "";
@@ -72,6 +88,13 @@ function displayTasks() {
 
         const taskName = document.createElement("span");
         taskName.textContent = task.name;
+
+        if (task.when) {
+            const when = document.createElement("small");
+            when.className = "task-when";
+            when.textContent = task.when;
+            taskName.appendChild(when);
+        }
 
         const actions = document.createElement("div");
         actions.className = "task-actions";
@@ -154,60 +177,123 @@ function displayTasks() {
 
     });
 
-    const calendarForm = document.getElementById("calendar-form");
-    const activityName = document.getElementById("activity-name");
-    const activityDay = document.getElementById("activity-day");
-    const activityTime = document.getElementById("activity-time");
-    const activityCategory = document.getElementById("activity-category");
+    // ---------- Weekly calendar: click a slot to schedule ----------
+    const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+    const dialog = document.getElementById("schedule-dialog");
+    const scheduleForm = document.getElementById("schedule-form");
+    const nameInput = document.getElementById("schedule-name");
+    const addTaskBox = document.getElementById("schedule-add-task");
+    const deleteBtn = document.getElementById("schedule-delete");
+    let slot = null;        // { day, time } being edited
+    let editing = null;     // activity being edited, or null for a new one
 
-    function displayActivities() {
-        document.querySelectorAll(".calendar .event").forEach(event => event.remove());
-        const rows = document.querySelectorAll(".calendar-row");
-        activities.forEach(activity => {
-        rows.forEach(row => {
-            if (row.children[0].textContent.trim() === activity.time) {
-                const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-                const dayIndex = days.indexOf(activity.day);
-                const cell = row.children[dayIndex + 1];
-
-                if (cell) {
-                    const event = document.createElement("div");
-                    event.className = "event " + activity.category;
-                    event.textContent = activity.name;
-
-                    const deleteButton = document.createElement("button");
-                    deleteButton.textContent = "x";
-                    deleteButton.type ="button";
-                    deleteButton.addEventListener("click", function () {
-                        activities = activities.filter(item => item.id !== activity.id);
-                        localStorage.setItem("njeFlowActivities", JSON.stringify(activities));
-                        displayActivities();
-                    });
-
-                    event.appendChild(deleteButton);
-                    cell.appendChild(event);
-                }
-            }
-        });
-    });
+    function saveActivities() {
+        // Saved first; saveTasks() then notifies everyone once both are stored
+        localStorage.setItem("njeFlowActivities", JSON.stringify(activities));
     }
 
-calendarForm.addEventListener("submit", function (event) {
-    event.preventDefault();
+    function linkedTask(activity) {
+        return activity.taskId ? tasks.find(t => t.id === activity.taskId) : null;
+    }
 
-    activities.push({
-        id: Date.now(),
-        name: activityName.value.trim(),
-        day: activityDay.value,
-        time: activityTime.value,
-        category: activityCategory.value
+    // Tag every day cell with its day/time so clicks know where they are
+    document.querySelectorAll(".calendar-row").forEach(row => {
+        const time = row.children[0].textContent.trim();
+        DAYS.forEach((day, i) => {
+            const cell = row.children[i + 1];
+            if (!cell) return;
+            cell.classList.add("slot");
+            cell.dataset.day = day;
+            cell.dataset.time = time;
+            cell.title = `Schedule something on ${day} at ${time}`;
+        });
     });
 
-    localStorage.setItem("njeFlowActivities", JSON.stringify(activities));
+    function displayActivities() {
+        document.querySelectorAll(".calendar .slot .event").forEach(e => e.remove());
+        activities.forEach(activity => {
+            const cell = document.querySelector(
+                `.calendar .slot[data-day="${activity.day}"][data-time="${activity.time}"]`);
+            if (!cell) return;
 
-    calendarForm.reset();
-    displayActivities();
-});
+            const event = document.createElement("div");
+            const task = linkedTask(activity);
+            event.className = "event " + activity.category + (task && task.completed ? " done" : "");
+            event.textContent = activity.name;
+            event.title = "Click to edit";
+            event.addEventListener("click", e => {
+                e.stopPropagation();
+                openSchedule(activity.day, activity.time, activity);
+            });
+            cell.appendChild(event);
+        });
+    }
+
+    function openSchedule(day, time, activity = null) {
+        slot = { day, time };
+        editing = activity;
+        document.getElementById("schedule-when").textContent = `${day} · ${time}`.toUpperCase();
+        document.getElementById("schedule-title").textContent =
+            activity ? "Edit this activity" : "What would you like to schedule?";
+        document.getElementById("schedule-save").textContent = activity ? "Save" : "Schedule";
+        nameInput.value = activity ? activity.name : "";
+        const category = activity ? activity.category : "study";
+        scheduleForm.querySelector(`input[value="${category}"]`).checked = true;
+        addTaskBox.checked = activity ? Boolean(linkedTask(activity)) : true;
+        deleteBtn.hidden = !activity;
+        dialog.showModal();
+        nameInput.focus();
+    }
+
+    document.querySelector(".calendar").addEventListener("click", e => {
+        const cell = e.target.closest(".slot");
+        if (cell) openSchedule(cell.dataset.day, cell.dataset.time);
+    });
+
+    scheduleForm.addEventListener("submit", e => {
+        e.preventDefault();
+        const name = nameInput.value.trim();
+        if (!name) return nameInput.focus();
+        const category = scheduleForm.querySelector('input[name="schedule-category"]:checked').value;
+        const when = `${slot.day} · ${slot.time}`;
+
+        const activity = editing || { id: Date.now(), day: slot.day, time: slot.time };
+        activity.name = name;
+        activity.category = category;
+
+        // Keep the matching task in "Your plan" in sync
+        let task = linkedTask(activity);
+        if (addTaskBox.checked) {
+            if (task) {
+                task.name = name;
+                task.when = when;
+            } else {
+                task = { id: Date.now() + 1, name, completed: false, when, activityId: activity.id };
+                tasks.push(task);
+                activity.taskId = task.id;
+            }
+        } else if (task) {
+            tasks = tasks.filter(t => t.id !== task.id);
+            delete activity.taskId;
+        }
+
+        if (!editing) activities.push(activity);
+        dialog.close();
+        saveActivities();
+        saveTasks();         // also notifies the other pages
+    });
+
+    deleteBtn.addEventListener("click", () => {
+        if (!editing) return;
+        tasks = tasks.filter(t => t.id !== editing.taskId);
+        activities = activities.filter(a => a.id !== editing.id);
+        dialog.close();
+        saveActivities();
+        saveTasks();
+    });
+
+    document.getElementById("schedule-cancel").addEventListener("click", () => dialog.close());
+    dialog.addEventListener("click", e => { if (e.target === dialog) dialog.close(); });
 
 displayActivities();
 
